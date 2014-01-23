@@ -188,7 +188,7 @@ class DateRangeFilter(ChoiceFilter):
 class AllValuesFilter(ChoiceFilter):
     @property
     def field(self):
-        qs = self.model._default_manager.distinct()
+        qs = getattr(self, 'queryset', self.model._default_manager).distinct()
         qs = qs.order_by(self.name).values_list(self.name, flat=True)
         self.extra['choices'] = BLANK_CHOICE_DASH + [(o, o) for o in qs]
         return super(AllValuesFilter, self).field
